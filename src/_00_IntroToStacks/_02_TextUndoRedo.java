@@ -50,15 +50,19 @@ public class _02_TextUndoRedo implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("Key pressed code=" + e.getKeyCode() + ", char=" + e.getKeyChar());
+		String labeltext = label.getText();
 		if(e.getKeyCode() == 8) {
-			deleted.pop();
-			String labeltext = label.getText();
-			label.setText(labeltext.substring(0, labeltext.length() - 1));
+			deleted.push(labeltext.charAt(labeltext.length()-1));
+			labeltext = labeltext.substring(0, labeltext.length() - 1);
+			label.setText(labeltext);
 		}
-		deleted.push(e.getKeyChar());
-		label.setText(label.getText() + e.getKeyChar());
+		else if(e.getKeyCode() == 38) {
+			char undo = deleted.pop();
+			label.setText(labeltext + undo);
+		}
+		else {
+			label.setText(labeltext + e.getKeyChar());
+		}
 	}
 
 	@Override
