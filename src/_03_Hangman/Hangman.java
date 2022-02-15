@@ -18,34 +18,38 @@ public class Hangman implements KeyListener{
 	JPanel panel = new JPanel();
 	int lifeCount = 10;
 	JLabel lives = new JLabel("Lives: " + lifeCount + "     ");
-	JLabel wordSpace = new JLabel("               ");
+	JLabel wordSpace = new JLabel("                  ");
 	Stack<String> words = new Stack<String>();
 	boolean completed = false;
 	String currentWord;
 	String wordSpaceText;
 	char[] wordChars;
 	boolean found = false;
+	JLabel missed = new JLabel("Missed characters:  ");
+	JLabel label = new JLabel();
 	
 	Hangman(){
 		String input = JOptionPane.showInputDialog("Enter the number of words to guess (1-100): ");
 		int wordCount = Integer.parseInt(input);
 		for(int i = 0; i < wordCount; i++) {
 			String randWord = Utilities.readRandomLineFromFile("dictionary.txt");
-			
-			for(int j = 0; j < words.size(); j++) {
-				if(words.contains(randWord) == false) {
-					words.push(randWord);
-				}
+			System.out.println(randWord);
+			if(words.contains(randWord) == false) {
+				words.push(randWord);
 			}
 			
 		}
 		currentWord = words.pop();
-		wordSpaceText = createWordSpace(Utilities.readRandomLineFromFile(currentWord));
+		System.out.println(currentWord);
+		wordSpaceText = createWordSpace(currentWord);
 		wordChars = wordSpaceText.toCharArray();
 		wordSpace.setText(wordSpaceText);
-		panel.add(lives);
-		wordSpace.addKeyListener(this);
-		panel.add(wordSpace);
+		label.setText("<html> Lives: " + lifeCount + "     " +  wordSpace.getText() + "<br>" + missed.getText() + "</html>");
+		//panel.add(lives);
+		//panel.add(wordSpace);
+		//panel.add(missed);
+		panel.add(label);
+		frame.addKeyListener(this);
 		frame.add(panel);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,7 +58,7 @@ public class Hangman implements KeyListener{
 	public String createWordSpace(String word) {
 		String spaces = "";
 		for(int i = 0; i < word.length(); i++) {
-			spaces+="_";
+			spaces+="__ ";
 		}
 		return spaces;
 	}
@@ -67,7 +71,7 @@ public class Hangman implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("test");
 		if(wordSpace.getText().contains("_") == false) {
 			completed = true;
 		}
@@ -79,13 +83,14 @@ public class Hangman implements KeyListener{
 				wordSpace.setText(wordSpaceText);
 				found = true;
 			}
-			if(found == false) {
-				lifeCount--;
-				lives.setText("Lives: " + lifeCount);
-			}
+		}
+		if(found == false) {
+			lifeCount--;
+			lives.setText("Lives: " + lifeCount);
+			missed.setText(missed.getText() + e.getKeyChar() + "  ");
 		}
 		
-		if(completed = true) {
+		if(completed == true) {
 			if(words.isEmpty()) {
 				JOptionPane.showMessageDialog(null, "You won the game!");
 				System.exit(0);
@@ -102,7 +107,7 @@ public class Hangman implements KeyListener{
 		if(lifeCount == 0) {
 			JOptionPane.showMessageDialog(null, "You ran out of lives! You lost the game.");
 		}
-		
+		found = false;
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {

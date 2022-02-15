@@ -39,7 +39,6 @@ public class _02_BaseballTickets {
 		int first;
 		int time = 0;
 		int val = 0;
-		int pos = 0;
 		
 		for(int i = 0; i <= position; i++) {
 			first = ticketsQueue.remove();
@@ -50,20 +49,20 @@ public class _02_BaseballTickets {
 			}
 			val = first;
 			System.out.println(ticketsQueue);
-			pos = ticketsQueue.size()-1;
 		}
 		
 		while(val>0) {
 			first = ticketsQueue.remove();
 			first--;
-			pos--;
 			time++;
 			if(first == 0) {
-				if(pos == 0) {
-					break;
+				if(val == first) {
+					if(val == 1) {
+						break;
+					}
 				}
 			}
-			if(first != 1) {
+			else {
 				ticketsQueue.add(first);
 			}
 			System.out.println(ticketsQueue);
